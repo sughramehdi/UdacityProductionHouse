@@ -5,6 +5,7 @@ import json
 from flask_cors import CORS
 
 from models import setup_db, Actor, Movie, CastDetails
+from auth import AuthError, requires_auth
 
 
 def create_app(test_config=None):
@@ -34,39 +35,92 @@ def after_request(response):
     return response
 
 
-@APP.route('/actors')
-def get_actors():
-    # try:
-    selection = Actor.query.order_by(Actor.id).all()
-    actors = [actor.format() for actor in selection]
-
-    if len(actors) == 0:
-        abort(404)
-
+@APP.route('/')
+def start_page():
     return jsonify({
-        'success': True,
-        'actors': actors
+        "message": "Welcome to Udacity Production House!"
+    })
+
+
+@APP.route('/actors')
+@requires_auth('get:actors')
+def get_actors():
+    try:
+        selection = Actor.query.order_by(Actor.id).all()
+        actors = [actor.format() for actor in selection]
+
+        if len(actors) == 0:
+            abort(404)
+
+        return jsonify({
+            'success': True,
+            'actors': actors
         })
-    #except Exception:
-    #    abort(422)
+    except Exception:
+        abort(422)
 
 
 @APP.route('/actors', methods=['POST'])
+@requires_auth('post:actors')
 def create_actors():
+    try:
 
-    body = request.get_json()
+        body = request.get_json()
 
-    new_name = body.get('name', None)
-    new_age = body.get('age', None)
-    new_gender = body.get('gender', None)
+        new_name = body.get('name', None)
+        new_age = body.get('age', None)
+        new_gender = body.get('gender', None)
 
-    actor = Actor(name=new_name, age=new_age, gender=new_gender)
-    actor.insert()
+        actor = Actor(name=new_name, age=new_age, gender=new_gender)
+        actor.insert()
 
-    return jsonify({
-        'success': True,
-        'actor': actor.format()
+        return jsonify({
+            'success': True,
+            'actor': actor.format()
         })
+    except Exception:
+        abort(422)
+
+
+@APP.route('/actors/<int:actor_id>', methods=['PATCH'])
+@requires_auth('patch:actors')
+def update_actors(actor_id):
+    try:
+        body = request.get_json()
+
+        actor = Actor.query.filter(Actor.id == actor_id).first()
+
+        if actor is None:
+            abort(404)
+
+        actor.name = body.get('name', actor.name)
+        actor.age = body.get('age', actor.age)
+        actor.gender = body.get('gender', actor.gender)
+
+        actor.update()
+
+        return jsonify({
+            'success': True,
+            'actor': actor.format()
+        })
+    except Exception:
+        abort(422)
+
+
+@APP.route('/actors/<int:actor_id>', methods=['DELETE'])
+@requires_auth('delete:actors')
+def delete_actors(actor_id):
+    try:
+        actor = Actor.query.filter(Actor.id == actor_id).first()
+        if actor is None:
+            abort(404)
+        actor.delete()
+        return jsonify({
+            'success': True,
+            'delete': actor_id
+        })
+    except Exception:
+        abort(422)
 
 
 if __name__ == '__main__':
