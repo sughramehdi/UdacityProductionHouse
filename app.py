@@ -33,19 +33,19 @@ APP = create_app()
 
 @APP.route('/actors')
 def get_actors():
-    try:
-        selection = Actor.query.order_by(Actor.id).all()
-        actors = [actor.format() for actor in selection]
+    # try:
+    selection = Actor.query.order_by(Actor.id).all()
+    actors = [actor.format() for actor in selection]
 
-        if len(actors) == 0:
-            abort(404)
+    if len(actors) == 0:
+        abort(404)
 
-        return jsonify({
-            'success': True,
-            'actors': actors
+    return jsonify({
+        'success': True,
+        'actors': actors
         })
-    except Exception:
-        abort(422)
+    #except Exception:
+    #    abort(422)
 
 
 if __name__ == '__main__':
