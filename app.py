@@ -44,7 +44,7 @@ def start_page():
 
 @APP.route('/actors')
 @requires_auth('get:actors')
-def get_actors():
+def get_actors(payload):
     try:
         selection = Actor.query.order_by(Actor.id).all()
         actors = [actor.format() for actor in selection]
@@ -62,7 +62,7 @@ def get_actors():
 
 @APP.route('/actors', methods=['POST'])
 @requires_auth('post:actor')
-def create_actors():
+def create_actors(payload):
     try:
 
         body = request.get_json()
@@ -84,7 +84,7 @@ def create_actors():
 
 @APP.route('/actors/<int:actor_id>', methods=['PATCH'])
 @requires_auth('patch:actor')
-def update_actors(actor_id):
+def update_actors(payload, actor_id):
     try:
         body = request.get_json()
 
@@ -109,7 +109,7 @@ def update_actors(actor_id):
 
 @APP.route('/actors/<int:actor_id>', methods=['DELETE'])
 @requires_auth('delete:actor')
-def delete_actors(actor_id):
+def delete_actors(payload, actor_id):
     try:
         actor = Actor.query.filter(Actor.id == actor_id).first()
         if actor is None:
