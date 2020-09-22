@@ -44,6 +44,8 @@ def get_actors():
             'success': True,
             'actors': actors
         })
+    except Exception:
+        abort(422)
 
 
 if __name__ == '__main__':
