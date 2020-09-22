@@ -48,6 +48,24 @@ def get_actors():
     #    abort(422)
 
 
+@APP.route('/actors', methods=['POST'])
+def create_actors():
+
+    body = request.get_json()
+
+    new_name = body.get('name', None)
+    new_age = body.get('age', None)
+    new_gender = body.get('gender', None)
+
+    actor = Actor(name=new_name, age=new_age, gender=new_gender)
+    actor.insert()
+
+    return jsonify({
+        'success': True,
+        'actor': actor.format()
+        })
+
+
 if __name__ == '__main__':
     APP.run()
     # APP.run(host='0.0.0.0', port=8080, debug=True)
