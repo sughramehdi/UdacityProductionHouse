@@ -61,7 +61,7 @@ def get_actors():
 
 
 @APP.route('/actors', methods=['POST'])
-@requires_auth('post:actors')
+@requires_auth('post:actor')
 def create_actors():
     try:
 
@@ -83,7 +83,7 @@ def create_actors():
 
 
 @APP.route('/actors/<int:actor_id>', methods=['PATCH'])
-@requires_auth('patch:actors')
+@requires_auth('patch:actor')
 def update_actors(actor_id):
     try:
         body = request.get_json()
@@ -108,7 +108,7 @@ def update_actors(actor_id):
 
 
 @APP.route('/actors/<int:actor_id>', methods=['DELETE'])
-@requires_auth('delete:actors')
+@requires_auth('delete:actor')
 def delete_actors(actor_id):
     try:
         actor = Actor.query.filter(Actor.id == actor_id).first()

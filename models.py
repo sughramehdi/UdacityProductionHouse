@@ -114,4 +114,4 @@ class Movie(db.Model):
         }
 
 
-#postgresql - adjacent - 66890
+# postgresql - adjacent - 66890
