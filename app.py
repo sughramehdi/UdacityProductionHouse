@@ -123,6 +123,84 @@ def delete_actors(payload, actor_id):
         abort(422)
 
 
+@APP.route('/movies')
+@requires_auth('get:movies')
+def get_movies(payload):
+    try:
+        selection = Movie.query.order_by(Movie.id).all()
+        movies = [movie.format() for movie in selection]
+
+        if len(movies) == 0:
+            abort(404)
+
+        return jsonify({
+            'success': True,
+            'movies': movies
+        })
+    except Exception:
+        abort(422)
+
+
+@APP.route('/movies', methods=['POST'])
+@requires_auth('post:movie')
+def create_movies(payload):
+    try:
+
+        body = request.get_json()
+
+        new_name = body.get('name', None)
+        new_releasedate = body.get('releasedate', None)
+
+        movie = Movie(name=new_name, releasedate=new_releasedate)
+        movie.insert()
+
+        return jsonify({
+            'success': True,
+            'movie': movie.format()
+        })
+    except Exception:
+        abort(422)
+
+
+@APP.route('/movies/<int:movie_id>', methods=['PATCH'])
+@requires_auth('patch:movie')
+def update_movies(payload, movie_id):
+    try:
+        body = request.get_json()
+
+        movie = Movie.query.filter(Movie.id == movie_id).first()
+
+        if movie is None:
+            abort(404)
+
+        movie.name = body.get('name', movie.name)
+        movie.releasedate = body.get('releasedate', movie.releasedate)
+        movie.update()
+
+        return jsonify({
+            'success': True,
+            'movie': movie.format()
+        })
+    except Exception:
+        abort(422)
+
+
+@APP.route('/movies/<int:movie_id>', methods=['DELETE'])
+@requires_auth('delete:movie')
+def delete_movies(payload, movie_id):
+    try:
+        movie = Movie.query.filter(Movie.id == movie_id).first()
+        if movie is None:
+            abort(404)
+        movie.delete()
+        return jsonify({
+            'success': True,
+            'delete': movie_id
+        })
+    except Exception:
+        abort(422)
+
+
 if __name__ == '__main__':
     APP.run()
     # APP.run(host='0.0.0.0', port=8080, debug=True)
