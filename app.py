@@ -201,6 +201,49 @@ def delete_movies(payload, movie_id):
         abort(422)
 
 
+# Error Handling
+'''
+Example error handling for unprocessable entity
+'''
+
+
+@APP.errorhandler(422)
+def unprocessable(error):
+    return jsonify({
+        "success": False,
+        "error": 422,
+        "message": "unprocessable"
+    }), 422
+
+
+@APP.errorhandler(404)
+def not_found(error):
+    return jsonify({
+        "success": False,
+        "error": 404,
+        "message": "resource not found"
+    }), 404
+
+
+@APP.errorhandler(400)
+def badrequest(error):
+    return jsonify({
+        "success": False,
+        "error": 400,
+        "message": "bad request"
+    }), 400
+
+
+@APP.errorhandler(500)
+def internalservererror(error):
+    return jsonify({
+        "success": False,
+        "error": 500,
+        "message": "Internal Server Error"
+    }), 500
+
+
+
 if __name__ == '__main__':
     APP.run()
     # APP.run(host='0.0.0.0', port=8080, debug=True)
