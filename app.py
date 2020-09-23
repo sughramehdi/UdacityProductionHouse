@@ -202,9 +202,6 @@ def delete_movies(payload, movie_id):
 
 
 # Error Handling
-'''
-Example error handling for unprocessable entity
-'''
 
 
 @APP.errorhandler(422)
