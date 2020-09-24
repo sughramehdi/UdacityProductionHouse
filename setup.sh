@@ -5,3 +5,6 @@ export ALGORITHMS=["RS256"]
 export DATABASE_URL="postgres://oqbvrscqxtauxy:e136500eea05225b7f9c9188950e841a38ff81f73c5702e4b2a8222ad9521e0d@ec2-34-234-185-150.compute-1.amazonaws.com:5432/d54n3tq0r4q5r8"
 export CLIENT_ID="K1ueY2GupUBMrurXVADOyt8QFOguy2za"
 export CLIENT_SECRET="UirC6lusHn_itXiQSEPMZtV-RcThw6nlpdRvOzSZzo_sq8esBzRrv5SxKXHvBq8M"
+export TEST_DATABASE_NAME="productionhouse"
+export TEST_DATABASE_USERNAME="postgres"
+export TEST_DATABASE_PASSWORD="postgres"
