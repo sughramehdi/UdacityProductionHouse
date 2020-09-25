@@ -91,7 +91,7 @@ class Movie(db.Model):
         'Actor', secondary=CastDetails,
         backref=db.backref('Movie'))
 
-    def __init__(self, name, releasedate):
+    def __init__(self, title, releasedate):
         self.title = title,
         self.releasedate = releasedate
 

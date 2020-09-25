@@ -34,13 +34,11 @@ def after_request(response):
     return response
 
 
-'''
 @APP.route('/')
 def start_page():
     return jsonify({
         "message": "Welcome to Udacity Production House!"
     })
-'''
 
 
 @APP.route('/actors')
@@ -246,6 +244,24 @@ def methodnotfound(error):
         "error": 405,
         "message": "Method Not Found"
     }), 405
+
+
+@APP.errorhandler(401)
+def unauthorized(error):
+    return jsonify({
+        "success": False,
+        "error": 401,
+        "message": "Unauthorized"
+    }), 401
+
+
+@APP.errorhandler(403)
+def forbidden(error):
+    return jsonify({
+        "success": False,
+        "error": 403,
+        "message": "Forbidden"
+    }), 403
 
 # return app
 

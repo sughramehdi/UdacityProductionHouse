@@ -3,7 +3,7 @@ import unittest
 import json
 from flask_sqlalchemy import SQLAlchemy
 
-from app import create_app
+from app import APP
 from models import setup_db, Actor, Movie
 
 
@@ -12,9 +12,10 @@ class ProductionHouseTestCase(unittest.TestCase):
 
     def setUp(self):
         """Define test variables and initialize app."""
-        self.app = create_app()
+        self.app = APP
         self.client = self.app.test_client
-        self.database_path = os.environ.get('DATABASE_URL')
+        self.database_path = os.environ.get('TESTDATABASE_URL')
+        # self.database_path = "postgres://postgres:postgres@localhost:5432/productionhouse"
         setup_db(self.app, self.database_path)
 
         # sample authorization header
@@ -85,7 +86,6 @@ class ProductionHouseTestCase(unittest.TestCase):
 
     def test_405_incorrect_get_movies(self):
         res = self.client().get('/movies/23', headers=self.auth_header)
-        print(res.data)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 405)
@@ -163,7 +163,6 @@ class ProductionHouseTestCase(unittest.TestCase):
         res = self.client().post('/movies', json=self.new_movie,
                                  headers=self.auth_header)
         data = json.loads(res.data)
-
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
         self.assertTrue(data['movie'])
