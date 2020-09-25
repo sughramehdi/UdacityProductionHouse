@@ -30,7 +30,7 @@ class ProductionHouseTestCase(unittest.TestCase):
 
         # sample input for adding a movie
         self.new_movie = {
-            'name': 'Titanic',
+            'title': 'Titanic',
             'releasedate': '2020-10-10 00:12:12'
         }
 

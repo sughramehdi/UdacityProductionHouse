@@ -15,7 +15,7 @@ def create_app(test_config=None):
     # CORS(app)
     cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
     # return app
-    # app = create_app()
+    # APP = create_app()
 
     # CORS Headers
 
@@ -138,10 +138,10 @@ def create_app(test_config=None):
 
             body = request.get_json()
 
-            new_name = body.get('name', None)
+            new_title = body.get('title', None)
             new_releasedate = body.get('releasedate', None)
 
-            movie = Movie(name=new_name, releasedate=new_releasedate)
+            movie = Movie(title=new_title, releasedate=new_releasedate)
             movie.insert()
 
             return jsonify({
@@ -162,7 +162,7 @@ def create_app(test_config=None):
             if movie is None:
                 abort(404)
 
-            movie.name = body.get('name', movie.name)
+            movie.title = body.get('title', movie.title)
             movie.releasedate = body.get('releasedate', movie.releasedate)
             movie.update()
 
@@ -232,7 +232,6 @@ def create_app(test_config=None):
 
     return app
 
-
-# if __name__ == '__main__':
-#    app.run()
+#if __name__ == '__main__':
+#    APP.run()
     # app.run(host='0.0.0.0', port=8080, debug=True)

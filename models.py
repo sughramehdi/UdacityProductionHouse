@@ -85,14 +85,14 @@ class Movie(db.Model):
     __tablename__ = 'movies'
 
     id = Column(Integer, primary_key=True)
-    name = Column(String)
+    title = Column(String)
     releasedate = Column(String)
     actors = db.relationship(
         'Actor', secondary=CastDetails,
         backref=db.backref('Movie'))
 
     def __init__(self, name, releasedate):
-        self.name = name
+        self.title = title,
         self.releasedate = releasedate
 
     def insert(self):
@@ -109,7 +109,7 @@ class Movie(db.Model):
     def format(self):
         return {
             'id': self.id,
-            'name': self.name,
+            'title': self.title,
             'releasedate': self.releasedate
         }
 
