@@ -10,6 +10,10 @@ AUTH0_DOMAIN = os.environ.get('AUTH0_DOMAIN')
 ALGORITHMS = os.environ.get('ALGORITHMS')
 API_AUDIENCE = os.environ.get('API_AUDIENCE')
 
+# AUTH0_DOMAIN = "gogirl.us.auth0.com"
+# ALGORITHMS = ["RS256"]
+# API_AUDIENCE = "productionhouse"
+
 # AuthError Exception
 '''
 AuthError Exception
@@ -183,7 +187,11 @@ def requires_auth(permission=''):
                 payload = verify_decode_jwt(token)
                 check_permissions(permission, payload)
             except Exception:
-                abort(401)
+                # abort(401)
+                raise AuthError({
+                    'code': 'no_permission',
+                    'description': 'No permission'
+                }, 401)
             return f(payload, *args, **kwargs)
         return wrapper
     return requires_auth_decorator

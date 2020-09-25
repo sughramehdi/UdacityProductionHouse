@@ -4,8 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 import json
 from flask_cors import CORS
 
-from models import setup_db, Actor, Movie, CastDetails
-from auth import AuthError, requires_auth
+from models import setup_db, Actor, Movie
+from auth import requires_auth
 
 
 def create_app(test_config=None):
@@ -13,15 +13,11 @@ def create_app(test_config=None):
     app = Flask(__name__)
     setup_db(app)
     # CORS(app)
-
     cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
-
     # return app
+    # app = create_app()
 
-
-#app = create_app()
-
-# CORS Headers
+    # CORS Headers
 
     @app.after_request
     def after_request(response):
@@ -33,11 +29,13 @@ def create_app(test_config=None):
             'GET,POST,DELETE,PATCH,OPTIONS')
         return response
 
+    '''
     @app.route('/')
     def start_page():
         return jsonify({
             "message": "Welcome to Udacity Production House!"
         })
+    '''
 
     @app.route('/actors')
     @requires_auth('get:actors')
@@ -111,7 +109,7 @@ def create_app(test_config=None):
             actor.delete()
             return jsonify({
                 'success': True,
-                'delete': actor_id
+                'deleted': actor_id
             })
         except Exception:
             abort(422)
@@ -185,7 +183,7 @@ def create_app(test_config=None):
             movie.delete()
             return jsonify({
                 'success': True,
-                'delete': movie_id
+                'deleted': movie_id
             })
         except Exception:
             abort(422)
@@ -224,9 +222,17 @@ def create_app(test_config=None):
             "message": "Internal Server Error"
         }), 500
 
+    @app.errorhandler(405)
+    def methodnotfound(error):
+        return jsonify({
+            "success": False,
+            "error": 405,
+            "message": "Method Not Found"
+        }), 405
+
     return app
 
 
-if __name__ == '__main__':
-    app.run()
+# if __name__ == '__main__':
+#    app.run()
     # app.run(host='0.0.0.0', port=8080, debug=True)
