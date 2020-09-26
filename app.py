@@ -5,7 +5,7 @@ import json
 from flask_cors import CORS
 
 from models import setup_db, Actor, Movie
-from auth import requires_auth
+from auth import requires_auth, AuthError
 
 
 def create_app(test_config=None):
@@ -262,6 +262,15 @@ def forbidden(error):
         "error": 403,
         "message": "Forbidden"
     }), 403
+
+
+@APP.errorhandler(AuthError)
+def autherror(Exception):
+    return jsonify({
+        "success": False,
+        "error": 401,
+        "message": "Authorization Error"
+    }), 401
 
 # return app
 
