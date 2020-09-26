@@ -134,6 +134,8 @@ This will install all of the required packages we selected within the `requireme
 ### Running the unit test
 
 1. Download the GitHub repository sughramehdi/UdacityProductionHouse
-2. Export environment variables by running the setup.sh file:
+2. Open 'setup.sh' file and update the environment variable for TESTDATABASE_URL as per your environment
+3. Dump the sample psql file using the command 'psql <databasename> < test.psql'
+4. Export environment variables by running the setup.sh file:
     - For Windows: run command 'source setup.sh' from the command prompt
-3. Run the test_app.py file by running command: 'python test_app.py'
+5. Run the test_app.py file by running command: 'python test_app.py'
